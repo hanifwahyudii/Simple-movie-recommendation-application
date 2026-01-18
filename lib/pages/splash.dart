@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:amflix/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, AppRoutes.home);
+      Navigator.pushReplacementNamed(context, AppRoutes.pageLogin);
     });
   }
   @override
