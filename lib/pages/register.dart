@@ -1,6 +1,7 @@
 import 'package:amflix/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Registrasion extends StatefulWidget {
   const Registrasion({super.key});
@@ -12,6 +13,7 @@ class Registrasion extends StatefulWidget {
 class _RegistrasionState extends State<Registrasion> {
   TextEditingController emailC = TextEditingController();
   TextEditingController passC = TextEditingController();
+  TextEditingController confirmPassC = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +32,13 @@ class _RegistrasionState extends State<Registrasion> {
             height: 52,
             width: 350,
             child: TextField(
+              style: const TextStyle(color: Colors.white),
               controller: emailC,
               decoration: InputDecoration(
                 hintText: "Email",
                 
               border: OutlineInputBorder(
+                borderSide:BorderSide(color: Colors.amber),
                 borderRadius: BorderRadius.circular(8)),
               ),
             ),
@@ -44,6 +48,7 @@ class _RegistrasionState extends State<Registrasion> {
             height: 52,
             width: 350,
             child: TextField(
+              style: const TextStyle(color: Colors.white),
               obscureText: true,
               controller: passC,
               decoration: InputDecoration(
@@ -61,8 +66,9 @@ class _RegistrasionState extends State<Registrasion> {
             height: 52,
             width: 350,
             child: TextField(
+              style: const TextStyle(color: Colors.white),
               obscureText: true,
-              controller: passC,
+              controller: confirmPassC,
               decoration: InputDecoration(
                 hintText: "Konfirmasi Password",
                 
@@ -82,29 +88,50 @@ class _RegistrasionState extends State<Registrasion> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
              ),
              onPressed: () async {
-              try {
-              final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                  email: emailC.text.trim(),
-                  password: passC.text.trim(),
-              );
-              if (result.user != null) {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.login);
-              }
-             }
-             on FirebaseAuthException catch (e) {
-                String msg = "Email  or Password wrong";
+              if (emailC.text.isEmpty || passC.text.isEmpty || confirmPassC.text.isEmpty) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content: Text("Semua field wajib diisi")));
+                  return;
+                }
 
-                if (e.code == 'user-not-found') {
-                  msg = "Email tidak terdaftar";
-                } else if (e.code == 'wrong-password') {
-                  msg = "Password salah";
+                if (passC.text.length < 6) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content: Text("Password minimal 6 karakter")));
+                  return;
+                }
+
+                if (passC.text.trim() != confirmPassC.text.trim()) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content: Text("Password tidak sama")));
+                  return;
+                }
+
+              try {
+                final result = await FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                      email: emailC.text.trim(),
+                      password: passC.text.trim(),
+                    );
+
+                if (result.user != null) {
+                  Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+                }
+
+              } on FirebaseAuthException catch (e) {
+                String msg = "Registration failed. Please try again.";
+
+                if (e.code == 'email-already-in-use') {
+                  msg = "Email sudah terdaftar.";
+                } else if (e.code == 'weak-password') {
+                  msg = "Password terlalu lemah (min 6 karakter).";
                 } else if (e.code == 'invalid-email') {
-                  msg = "Format email tidak valid";
+                  msg = "Format email tidak valid.";
                 }
 
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(msg)));
               }
+
              },
              child: Text("Mendaftar",
              style: TextStyle(
@@ -146,9 +173,10 @@ class _RegistrasionState extends State<Registrasion> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Sudah punya akun? silahkan",
+                Text("Sudah punya akun? silahkan ",
                 style: TextStyle(
-                  fontSize: 15,         
+                  fontSize: 15,  
+                  color: Colors.white       
                 ),
               ),
                 TextButton(
@@ -159,8 +187,13 @@ class _RegistrasionState extends State<Registrasion> {
                 onPressed: (){
                   Navigator.of(context).pushNamed(AppRoutes.login);
                 },
-                 child: Text("Masuk"))
-            
+                 child: Text("Masuk",
+                 style: GoogleFonts.roboto(
+                  color: Color(0xff3498DB),
+                  fontWeight: FontWeight.bold
+                  )
+                ),
+              )           
               ],
             ),
           )

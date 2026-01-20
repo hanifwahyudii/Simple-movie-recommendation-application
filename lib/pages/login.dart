@@ -34,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
             height: 59,
             width: 354,
             child: TextField(
+              style: const TextStyle(color: Colors.white),
               controller: emailC,
               obscureText: false,
               decoration: InputDecoration(               
@@ -49,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
             height: 59,
             width: 354,
             child: TextField(
+              style: const TextStyle(color: Colors.white),
               controller: passC,
               obscureText: true,
               decoration: InputDecoration(               
@@ -135,7 +137,8 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Text("Belum punya akun?",
               style: GoogleFonts.roboto(
-                fontSize: 15,               
+                fontSize: 15,
+                color: Colors.white              
               ),
               ),
               TextButton(onPressed: (){
@@ -156,7 +159,8 @@ class _LoginPageState extends State<LoginPage> {
                ),
               Text(" sekarang",
               style: GoogleFonts.roboto(
-                fontSize: 15,               
+                fontSize: 15,      
+                color: Colors.white         
                 ),
                 )
             ],

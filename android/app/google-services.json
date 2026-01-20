@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "846060285496",
+    "project_id": "app-simple-movie-recomendation",
+    "storage_bucket": "app-simple-movie-recomendation.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846060285496:android:0775b39d95811c8bfa80cd",
+        "android_client_info": {
+          "package_name": "com.example.amflix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_r5XWGbYP1HusHrO04jUmCmbP98FoFa8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -45,10 +45,13 @@ app.*.map.json
 /android/app/release
 
 # --- Secrets & Firebase ---
+lib/config/api_config.dart
 .env
-*.keystore
-android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
+
 
 # --- Local config ---
 key.properties
+
+#firebase files
+lib/firebase_options.dart
+
