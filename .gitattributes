@@ -1,0 +1,5 @@
+# GitHub Language Detection
+*.dart linguist-language=Dart
+*.yaml linguist-language=Dart
+*.yml linguist-language=Dart
+*.html linguist-vendored
