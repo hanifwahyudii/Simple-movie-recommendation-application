@@ -2,7 +2,8 @@ import 'package:amflix/pages/detail_home.dart';
 import 'package:amflix/pages/home.dart';
 import 'package:amflix/pages/first.dart';
 import 'package:amflix/pages/login.dart';
-import 'package:amflix/pages/register.dart';
+import 'package:amflix/pages/registration.dart';
+
 import 'package:amflix/pages/splash.dart';
 import 'package:flutter/material.dart';
 import '../models/movie_model.dart';
@@ -30,17 +31,17 @@ class AppRoutes {
 
        case pageLogin:
         return MaterialPageRoute(
-          builder: (_) => const FirstPage(),
+          builder: (_) => const first(),
         );
 
       case login:
         return MaterialPageRoute(
-          builder: (_) => const LoginPage(),
+          builder: (_) => const Login(),
         );
 
       case register:
         return MaterialPageRoute(
-          builder: (_) => const Registrasion(),
+          builder: (_) => const Registration(),
         );
 
       case home:

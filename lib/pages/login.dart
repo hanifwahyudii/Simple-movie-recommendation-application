@@ -1,22 +1,46 @@
+import 'package:amflix/routes/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:amflix/routes/app_routes.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-
-
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<Login> createState() => _LoginState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginState extends State<Login> {
   TextEditingController emailC = TextEditingController();
   TextEditingController passC = TextEditingController();
 
-  
+  Future<UserCredential?> login() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email'],
+      );
+
+      final GoogleSignInAccount? googleUser =
+          await googleSignIn.signIn();
+
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
+      );
+
+      return await FirebaseAuth.instance
+          .signInWithCredential(credential);
+    } catch (e) {
+      debugPrint("Google login error: $e");
+      return null;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,58 +48,53 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left:22 ,top:40 ,right:19 ),
-            child: Image.asset("assets/images/logo_splash.png",
-            height:330 ,
-            width: 352,),
-          ),
-          SizedBox(height: 10),
-          SizedBox(
-            height: 59,
-            width: 354,
-            child: TextField(
-              style: const TextStyle(color: Colors.white),
-              controller: emailC,
-              obscureText: false,
-              decoration: InputDecoration(               
-                hintText: "Email", hintStyle: GoogleFonts.montserrat(
-                  fontSize: 15,
-                ),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-            )
-           ),
-          SizedBox(height: 16,),
-           SizedBox(
-            height: 59,
-            width: 354,
-            child: TextField(
-              style: const TextStyle(color: Colors.white),
-              controller: passC,
-              obscureText: true,
-              decoration: InputDecoration(               
-                hintText: "Password", hintStyle: GoogleFonts.montserrat(
-                  fontSize: 15,             
-                ),                     
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                
-                
-              ),
-            )
-           ),
-          SizedBox(height: 49,),
-           SizedBox(
-            height: 59,
-            width: 354,
-            child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xff3498DB),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)
-              )
+              padding: const EdgeInsets.only(top: 118, left: 109, right: 109),
+              child: Image.asset("assets/images/icon.png"),
             ),
-             onPressed: () async {
-              try {
+
+            SizedBox(height: 40),
+            SizedBox(
+              height: 52,
+              width: 322,
+              child: TextField(
+                controller: emailC,
+                style: const TextStyle(color: Color(0xffEEEEEE)),
+                decoration: InputDecoration(
+                  fillColor: Color(0xffEEEEEE),
+                  hintText: "Email",
+                  border: OutlineInputBorder(
+                    
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+             SizedBox(height: 25),
+             SizedBox(
+              height: 52,
+              width: 322,
+              child: TextField(
+                controller: passC,
+                obscureText: true,
+                style: const TextStyle(color: Color(0xffEEEEEE)),
+                decoration: InputDecoration(
+                  fillColor: Color(0xffEEEEEE),
+                  hintText: "Password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 40),
+            SizedBox(height: 62,
+            width:322 ,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xffBF092F)
+              ),
+              onPressed: () async{
+                 try {
                 final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: emailC.text.trim(),
                       password: passC.text.trim(),
@@ -99,72 +118,83 @@ class _LoginPageState extends State<LoginPage> {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(msg)));
               }
-            },
-                            
-             child: Text("Masuk",
-             style: GoogleFonts.poppins(
-              fontSize: 15,
-              color: Color(0xffFFFFFF),
+              }, child: 
+            Text("Masuk",
+            style: GoogleFonts.roboto(
+              color: Color(0xffF2EDED),
               fontWeight: FontWeight.bold
-             ),)),
+            ),)),),
+
+            SizedBox(height: 21,),          
+            SizedBox(
+            height: 62,
+            width:322 ,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xff1D546D)
+              ),
+              onPressed: ()async{
+                final result = await login();
+
+                if (result != null) {                 
+                  Navigator.pushReplacementNamed(
+                    context,
+                    AppRoutes.home, // atau home
+                  );
+                } else {                 
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Login Google dibatalkan"),
+                    ),
+                  );
+                }
+              }, 
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/group.png",
+                height: 25,
+                width: 25,),
+                Text("  Masuk",
+                style: GoogleFonts.roboto(
+                  color: Color(0xffEEEEEE),
+                  fontWeight: FontWeight.bold
+                ),),
+              ],
+            )
           ),
-          SizedBox(height: 40,),
-           SizedBox(
-            height: 59,
-            width: 354,
-            child: OutlinedButton(
-             style: OutlinedButton.styleFrom(
-              foregroundColor: Color(0xffE74C3C),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)
-              ),
-              side: BorderSide(
-                color: Color(0xffE74C3C)
-              )
-             ),
-              onPressed: (){},
-             child: Text("Google",
-             style: GoogleFonts.montserrat(
-              fontSize: 15,
-              fontWeight: FontWeight.bold
-             ),
-             )
-             ),
-          ),
-          SizedBox(height: 40,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Belum punya akun?",
-              style: GoogleFonts.roboto(
-                fontSize: 15,
-                color: Colors.white              
-              ),
-              ),
-              TextButton(onPressed: (){
-                Navigator.of(context).pushNamed(AppRoutes.register);
-                
-              },
-               style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,),
-               child: Text(" Mendaftar",
-               style: GoogleFonts.roboto(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff3498DB)
-               ),
-               )
-               ),
-              Text(" sekarang",
-              style: GoogleFonts.roboto(
-                fontSize: 15,      
-                color: Colors.white         
+        ),
+
+            SizedBox(height: 15,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Belum Memiliki Akun? ",
+                style: GoogleFonts.roboto(
+                  fontSize: 15,     
+                  color: Color(0xffFFFFFF)           
+                ),),
+                TextButton(onPressed: (){
+                  Navigator.of(context).pushNamed(AppRoutes.register);
+                }, 
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
                 ),
-                )
-            ],
-          )
+                child: Text("Daftar ",
+                style: GoogleFonts.roboto(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,  
+                  color: Color(0xffBF092F)
+                ),)),
+                Text("Disini",
+                style: GoogleFonts.roboto(
+                  fontSize: 15,                
+                  color: Color(0xffFFFFFF)
+                ),),
+              ],
+            ),
+            
         ],
       ),
     );
