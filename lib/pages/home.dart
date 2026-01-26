@@ -196,7 +196,7 @@ void _showLogoutDialog() {
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black87,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Center(
@@ -229,7 +229,7 @@ void _showLogoutDialog() {
             padding: const EdgeInsets.only(left: 8),
             child: PopupMenuButton<String>(
               offset: const Offset(0, 48),
-              color: const Color(0xFF1E1E1E), // 👈 background popup
+              color: const Color(0xFF1E1E1E), 
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
