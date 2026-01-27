@@ -45,13 +45,12 @@ app.*.map.json
 /android/app/release
 
 # --- Secrets & Firebase ---
-lib/config/api_config.dart
-.env
+
 
 
 # --- Local config ---
-key.properties
+
 
 #firebase files
-lib/firebase_options.dart
+
 
