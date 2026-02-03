@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 import '../models/movie_model.dart';
 import '../services/movie_service.dart';
-import '../config/api_config.dart';
-import 'package:amflix/routes/app_routes.dart';
 
+import 'package:amflix/routes/app_routes.dart';
+import '../widgets/movie_grid.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -320,88 +320,14 @@ void _showLogoutDialog() {
           ],
           backgroundColor: Colors.black87,
           ),
-          body: GridView.builder(
-            controller: _scrollController,
-            padding: const EdgeInsets.all(12),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.6,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemCount: movies.length,
-            itemBuilder: (context, index) {
-              final movie = movies[index];
-              final imageUrl =
-                  '${ApiConfig.imageBaseUrl}${movie.posterPath}';
-        
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.movieDetail,
-                    arguments: movie,
-                  );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              errorBuilder: (_, _, _) =>
-                                  const Icon(Icons.broken_image),
-                            ),
-                          ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.black87,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.star,
-                                      color: Colors.amber, size: 14),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    movie.rating.toStringAsFixed(1),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Center(
-                      child: Text(
-                        movie.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+          body: MovieGrid(
+            movies: movies,
+            scrollController: _scrollController,
+            onTap: (movie) {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.movieDetail,
+                arguments: movie,
               );
             },
           ),
@@ -416,8 +342,7 @@ void _showLogoutDialog() {
             ),
           ),
       ],
-    );
-    
+    );    
   }
 }
 
