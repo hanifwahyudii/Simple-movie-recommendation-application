@@ -5,41 +5,88 @@ import '../config/api_config.dart';
 
 class MovieDetailWidget extends StatelessWidget {
   final Movie movie;
-  const MovieDetailWidget({Key? key, required this.movie}) : super(key: key);
+  const MovieDetailWidget({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = '${ApiConfig.imageBaseUrl}${movie.posterPath}';
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(imageUrl, width: double.infinity, fit: BoxFit.cover),
+          _buildHeaderImage(),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(movie.title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+                _buildTitle(),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.amber),
-                    const SizedBox(width: 4),
-                    Text(movie.rating.toStringAsFixed(1), style: const TextStyle(color: Colors.white)),
-                    const SizedBox(width: 12),
-                    Text(movie.releaseDate, style: const TextStyle(color: Colors.grey)),
-                  ],
-                ),
+                _buildInfoRow(),
                 const SizedBox(height: 16),
-                const Text('Overview', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 6),
-                Text(movie.displayOverview, style: GoogleFonts.openSans(fontSize: 14, color: Colors.white70)),
+                _buildOverviewSection(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildHeaderImage() {
+    final imageUrl = '${ApiConfig.imageBaseUrl}${movie.posterPath}';
+    return Image.network(
+      imageUrl,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) =>
+          const Icon(Icons.broken_image, size: 100),
+    );
+  }
+
+  Widget _buildTitle() {
+    return Text(
+      movie.title,
+      style: const TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _buildInfoRow() {
+    return Row(
+      children: [
+        const Icon(Icons.star, color: Colors.amber),
+        const SizedBox(width: 4),
+        Text(
+          movie.rating.toStringAsFixed(1),
+          style: const TextStyle(color: Colors.white),
+        ),
+        const SizedBox(width: 12),
+        Text(movie.releaseDate, style: const TextStyle(color: Colors.grey)),
+      ],
+    );
+  }
+
+  Widget _buildOverviewSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Overview',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          movie.displayOverview,
+          style: GoogleFonts.openSans(fontSize: 14, color: Colors.white70),
+        ),
+      ],
     );
   }
 }

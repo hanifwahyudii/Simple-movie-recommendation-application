@@ -25,10 +25,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Amflix',
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFF141414), // Netflix-like dark background
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+          surface: const Color(0xFF141414),
+        ),
+        useMaterial3: true,
+      ),
       initialRoute: AppRoutes.splash,
       onGenerateRoute: AppRoutes.generateRoute,
       home: const AuthWrapper(),
-
     );
       
   }

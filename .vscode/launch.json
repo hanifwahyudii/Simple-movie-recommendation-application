@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "amflix",
+            "name": "Amflix",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "amflix (profile mode)",
+            "name": "Amflix (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "amflix (release mode)",
+            "name": "Amflix (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

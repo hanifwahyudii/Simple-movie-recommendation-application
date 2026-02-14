@@ -8,11 +8,11 @@ class MovieGrid extends StatelessWidget {
   final void Function(Movie) onTap;
 
   const MovieGrid({
-    Key? key,
+    super.key,
     required this.movies,
     required this.scrollController,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +28,7 @@ class MovieGrid extends StatelessWidget {
       itemCount: movies.length,
       itemBuilder: (context, index) {
         final movie = movies[index];
-        return MovieCard(
-          movie: movie,
-          onTap: () => onTap(movie),
-        );
+        return MovieCard(movie: movie, onTap: () => onTap(movie));
       },
     );
   }
